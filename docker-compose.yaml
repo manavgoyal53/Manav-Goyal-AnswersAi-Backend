@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: answers_ai_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongodb_new:27017/answers_ai
+      - REDIS_HOST=my_redis
+      - REDIS_PORT=6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - my_host_network
+    
+  mongo:
+    image: mongo:4.4
+    container_name: mongodb_new
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - my_host_network
+
+  redis:
+    image: 'redis'
+    container_name: 'my_redis'
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - my_host_network
+
+networks:
+  my_host_network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  redis_data:
