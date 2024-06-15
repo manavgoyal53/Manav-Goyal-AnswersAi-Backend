@@ -19,8 +19,8 @@ Create a `.env` file in the root directory with the following variables:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/manavgoyal53/Manav-Goyal-AnswersAi-Backend.
-   cd Manav-Goyal-AnswersAi-Backend.
+   git clone https://github.com/manavgoyal53/Manav-Goyal-AnswersAi-Backend
+   cd Manav-Goyal-AnswersAi-Backend
 
 2. Install dependencies:
     ```bash
