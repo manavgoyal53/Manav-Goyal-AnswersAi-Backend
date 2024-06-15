@@ -8,18 +8,14 @@ dotenv.config();
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+    let user1 = await User.findOne({ email });
+    let user2 = await User.findOne({ username });
+    if (user1 | user2 ) return res.status(400).json({ msg: 'User already exists' });
 
     user = new User({ username, email, password });
     await user.save();
-
-    const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, async (err, token) => {
-      if (err) throw err;
-      await redisClient.set(`user_${user._id}`,JSON.stringify(user),"EX",86400)
-      res.json({ token });
-    });
+    await redisClient.set(`user_${user._id}`,JSON.stringify(user),"EX",86400)
+    res.json({"message":`User created successfully with id - ${user._id}!`})
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

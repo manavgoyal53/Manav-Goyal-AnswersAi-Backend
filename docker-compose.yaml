@@ -7,9 +7,12 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGO_URI=mongodb://mongodb_new:27017/answers_ai
+      - DATABASE_URL=mongodb://mongodb_new:27017/answers_ai
       - REDIS_HOST=my_redis
       - REDIS_PORT=6379
+      - JWT_SECRET=P@ssw0rd!s3cur3R@nd0mS3cr3tG3n3r@t3d!
+      - API_SECRET=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
+      - PORT=3000
     depends_on:
       - mongo
       - redis

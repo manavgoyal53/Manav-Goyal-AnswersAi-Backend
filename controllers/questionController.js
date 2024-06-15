@@ -2,7 +2,8 @@ const {Question} = require('../models/Question');
 const { getAIAnswer } = require('../services/aiService');
 const {redisClient} = require("../utils")
 const Queue = require('bull');
-const updateUserQuestionsQueue = new Queue("updateUserQuestionsQueue");
+const updateUserQuestionsQueue = new Queue("updateUserQuestionsQueue",`redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`);
+const fetchAnswerQueue = new Queue("fetchAnswerQueue",`redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`);
 
 updateUserQuestionsQueue.process(async (job)=>{
   const data = job.data
@@ -33,6 +34,9 @@ exports.createQuestion = async (req, res) => {
     res.json(savedQuestion);
   } catch (err) {
     console.error(err.message);
+    if(err.message=="timeout of 60000ms exceeded"){
+      res.status(500).send("AI SERVICE RESPONSE TIMEOUT EXCEEDED. TRY BREAKING YOUR QUESTION IN SEVERAL PARTS MAYBE")
+    }
     res.status(500).send('Server Error');
   }
 };
